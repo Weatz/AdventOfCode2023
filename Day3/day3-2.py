@@ -41,7 +41,7 @@ def ComputeGears(table, numbers):
 
 
 
-f = open("C:\\Users\\jeand\\Documents\\AdventOfCode2023\\Day3\\buffer.txt", "r")
+f = open("Day3\\buffer.txt", "r")
 lines = f.readlines()
 
 tab, num = ComputeTable(lines)

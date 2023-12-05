@@ -45,7 +45,7 @@ def part2(str):
     return int(final)
 
 
-f = open("C:\\Users\\jeand\\Documents\\AdventOfCode2023\\Day1\\data1.txt", "r")
+f = open("Day1\\data1.txt", "r")
 lines = f.readlines()
 sum = 0
 

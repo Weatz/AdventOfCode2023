@@ -44,7 +44,7 @@ def part1(lines):
     return sum
 
 
-f = open("C:\\Users\\jeand\\Documents\\AdventOfCode2023\\Day3\\data3.txt", "r")
+f = open("Day3\\data3.txt", "r")
 lines = f.readlines()
 
 print(part1(lines))
