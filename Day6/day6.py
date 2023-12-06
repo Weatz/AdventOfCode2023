@@ -30,7 +30,23 @@ def Part1(lines):
         prod *= CalculateWinningsWays(race)
     print(prod)
     
+def ParseInputPart2(lines):
+    times = re.findall(r"(\d+)", lines[0])
+    distances = re.findall(r"(\d+)", lines[1])
+    time = ""
+    distance = ""
+    for i in range(len(times)):
+        time = time + times[i]
+        distance = distance + distances[i]
+    return (int(time), int(distance))
+
+def Part2(lines):
+    race = ParseInputPart2(lines)
+    print(race)
+    print(CalculateWinningsWays(race))
 
 f = open("Day6/data6.txt", "r")
 lines = f.readlines()
 Part1(lines)
+print("-----")
+Part2(lines)
