@@ -15,17 +15,19 @@ def ParseInput(lines):
 # y1 = (n - sqrt(d)) / 2
 # y2 = (n + sqrt(d) / 2)
 
+def CalculateWinningsWays(race):
+    delta = race[0] * race[0] - 4 * race[1]
+    y1 = (race[0] - math.sqrt(delta)) / 2
+    y2 = (race[0] + math.sqrt(delta)) / 2
+    loosing1 = math.floor(y1) + 1
+    loosing2 = race[0] - math.ceil(y2) + 1
+    return race[0] - loosing1 - loosing2 + 1
+
 def Part1(lines):
     prod = 1
     races = ParseInput(lines)
     for race in races:
-        delta = race[0] * race[0] - 4 * race[1]
-        y1 = (race[0] - math.sqrt(delta)) / 2
-        y2 = (race[0] + math.sqrt(delta)) / 2
-        loosing1 = math.floor(y1) + 1
-        loosing2 = race[0] - math.ceil(y2) + 1
-        winning = race[0] - loosing1 - loosing2 + 1
-        prod *= winning
+        prod *= CalculateWinningsWays(race)
     print(prod)
     
 
