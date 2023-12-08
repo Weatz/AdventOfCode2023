@@ -1,34 +1,25 @@
 import re
+import math
 
 def ParseInput(lines):
-    l = lines
     nodeDict = {}
-    sequence = l[0]
-    l.pop(0)
-    l.pop(0)
-    for line in l:
+    sequence = lines[0]
+    for line in lines[2:]:
         split = re.findall(r"(\w+)", line)
         nodeDict[split[0]] = (split[1], split[2])
     return sequence, nodeDict
 
 
 def ParseInput2(lines):
-    print(len(lines))
-    l = lines
     nodeDict = {}
     sequence = lines[0]
     startingNodes = []
-    finishNodes = []
-    l.pop(0)
-    l.pop(0)
-    for line in l:
+    for line in lines[2:]:
         split = re.findall(r"(\w+)", line)
         nodeDict[split[0]] = (split[1], split[2])
         if(split[0][2] == "A"):
             startingNodes.append(split[0])
-        elif(split[0][2] == "Z"):
-            finishNodes.append("Z")
-    return sequence, nodeDict, startingNodes, finishNodes
+    return sequence, nodeDict, startingNodes
 
 
 
@@ -52,7 +43,7 @@ def Part1(lines):
     print(e)
 
 def Part2(lines):
-    seq, nodeDict, startingNodes, finishNodes = ParseInput2(lines)
+    seq, nodeDict, startingNodes = ParseInput2(lines)
     convertedSeq = ConvertSeq(seq)
     stepsToFinish = []
     prod = len(convertedSeq)
@@ -64,13 +55,13 @@ def Part2(lines):
         while (currentNode[2] != "Z"):
             currentNode = (nodeDict[currentNode])[convertedSeq[e % len(convertedSeq)]]
             e += 1
-        prod *= e / len(convertedSeq) 
-    print(prod)
+        stepsToFinish.append(e)
+    print(math.lcm(*stepsToFinish))
 
 
 
 f = open("Day8/data8.txt", "r")
 lines = f.readlines()
-#Part1(lines)
+Part1(lines)
 print("-----")
 Part2(lines)
