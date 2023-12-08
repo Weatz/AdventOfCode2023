@@ -1,4 +1,5 @@
 strengthOrder = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+strengthOrder2 = ['J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A']
 
 
 def ParseInput(lines):
@@ -40,6 +41,31 @@ def FindStrength(hand):
         return 3
     return 2
 
+def FindStrength2(hand):
+    cards = {}
+    jockers = 0
+    for character in hand:
+        if(character == "J"):
+            jockers += 1
+        elif(character in cards):
+            cards[character] = cards[character] + 1
+        else:
+            cards[character] = 1
+    if(jockers == 5):
+        return 6
+    if(max(cards.values()) + jockers == 5):
+        return 6
+    if(max(cards.values()) + jockers == 4):
+        return 5
+    if(max(cards.values()) + jockers == 3):
+        if(len(cards) == 2):
+            return 4
+        return 3
+    if(max(cards.values()) + jockers == 2):
+        if(len(cards) == 3):
+            return 2
+        return 1
+    return 0
 
 
 
@@ -64,8 +90,31 @@ def Part1(lines):
 
     print(sum)
 
+def Part2(lines):
+    hands = ParseInput(lines)
+    handStrenghts = [[] for i in range(7)]
+    for hand in hands:
+        handStrenghts[FindStrength2(hand[0])].append(hand)
+    print(handStrenghts)
+    sortedHands = []
+    for tab in handStrenghts:
+        tab.sort(key=lambda hand:[strengthOrder2.index(c) for c in hand[0]])
+        sortedHands.append(tab)
+    print(sortedHands)
+    sum = 0
+    rank = 1
+    for tab in sortedHands:
+        for hand in tab:
+            print(hand, rank)
+            sum += hand[1] * rank
+            rank += 1
+
+    print(sum)
+
 
 
 f = open("Day7/data7.txt", "r")
 lines = f.readlines()
 Part1(lines)
+print("--------")
+Part2(lines)
