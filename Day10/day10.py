@@ -135,21 +135,11 @@ def GetNonHorizontalWalls(startingPos, maze):
     return nonHorizontalWalls
 
 def IsAdjacentTo(insideCases, outsideCases, pos):
-    if (pos[0] - 1, pos[1]) in insideCases:
+    adjacentCases = [(pos[0] - 1, pos[1]), (pos[0] + 1, pos[1]), (pos[0], pos[1] - 1), (pos[0], pos[1] + 1)]
+
+    if(len(set(adjacentCases).intersection(insideCases))):
         return 1
-    if (pos[0] - 1, pos[1]) in outsideCases:
-        return 2
-    if (pos[0] + 1, pos[1]) in insideCases:
-        return 1
-    if (pos[0] + 1, pos[1]) in outsideCases:
-        return 2
-    if (pos[0], pos[1] - 1) in insideCases:
-        return 1
-    if (pos[0], pos[1] - 1) in outsideCases:
-        return 2
-    if (pos[0], pos[1] + 1) in insideCases:
-        return 1
-    if (pos[0], pos[1] + 1) in outsideCases:
+    if(len(set(adjacentCases).intersection(outsideCases))):
         return 2
     return 0
 
