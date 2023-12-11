@@ -77,33 +77,82 @@ def ExploreMaze(maze, startingPos):
     return mainLoop
         
 
-def SearchIntersections(lines, startingPos, maze, mainLoop, pos):
-    nonVerticalWalls = ["-", ".", "F", "7"]
+def SearchIntersections(lines, nonVerticalWalls, nonHorizontalWalls, mainLoop, pos):
+    height = len(lines)
     width = len(lines[0])
+    
+    intersections = 0
+    jMinus = 0
+    jMax = 0
+    iMinus = 0
+    iMax = 0
+    if(pos[1] < width / 2):
+        jMinus = 0
+        jMax = pos[1]
+    else:
+        jMinus = pos[1]
+        jMax = width
+    if(pos[0] < height / 2):
+        iMinus = 0
+        iMax = pos[0]
+    else:
+        iMinus = pos[0]
+        iMax = height
+
+
+
+    if(jMax - jMinus < iMinus  - iMax):
+        for j in range(jMinus, jMax):
+            if((pos[0], j) in mainLoop):
+                if(lines[pos[0]][j] not in nonVerticalWalls):
+                    intersections += 1
+    else:
+        for i in range(iMinus, iMax):
+            if((i, pos[1]) in mainLoop):
+                if(lines[i][pos[1]] not in nonHorizontalWalls):
+                    intersections += 1
+
+    return (intersections % 2 == 1)
+
+def GetNonVerticalWalls(startingPos, maze):
+    nonVerticalWalls = ["-", ".", "F", "7"]
     nextToStart = (startingPos[0] - 1, startingPos[1])
     if nextToStart in maze:
         if startingPos not in maze[nextToStart]:
             nonVerticalWalls.append("S")
     else:
         nonVerticalWalls.append("S")
-        
-    
-    intersections = 0
-    intersectionsTab = []
-    for j in range(pos[1], width):
-        if((pos[0], j) in mainLoop):
-            if(lines[pos[0]][j] not in nonVerticalWalls):
-                intersections += 1
-                intersectionsTab.append([(pos[0], j), lines[pos[0]][j]])
-    return (intersections % 2 == 1)
+    return nonVerticalWalls
 
-def SearchGround(lines):
-    grounds = []
-    for i, line in enumerate(lines):
-        for j, char in enumerate(line):
-            if(char == "."):
-                grounds.append((i, j))
-    return grounds
+def GetNonHorizontalWalls(startingPos, maze):
+    nonHorizontalWalls = ["|", ".", "F", "L"]
+    nextToStart = (startingPos[0], startingPos[1] + 1)
+    if nextToStart in maze:
+        if startingPos not in maze[nextToStart]:
+            nonHorizontalWalls.append("S")
+    else:
+        nonHorizontalWalls.append("S")    
+    return nonHorizontalWalls
+
+def IsAdjacentTo(insideCases, outsideCases, pos):
+    if (pos[0] - 1, pos[1]) in insideCases:
+        return 1
+    if (pos[0] - 1, pos[1]) in outsideCases:
+        return 2
+    if (pos[0] + 1, pos[1]) in insideCases:
+        return 1
+    if (pos[0] + 1, pos[1]) in outsideCases:
+        return 2
+    if (pos[0], pos[1] - 1) in insideCases:
+        return 1
+    if (pos[0], pos[1] - 1) in outsideCases:
+        return 2
+    if (pos[0], pos[1] + 1) in insideCases:
+        return 1
+    if (pos[0], pos[1] + 1) in outsideCases:
+        return 2
+    return 0
+
 
 def Part1(lines):
     maze, startingPos = CreateMaze(lines)
@@ -113,18 +162,31 @@ def Part2(lines):
     maze, startingPos = CreateMaze(lines)
     mainLoop = ExploreMaze(maze, startingPos)
     sum = 0
-    internalGrounds = []
+
+    nonVerticalWalls = GetNonVerticalWalls(startingPos, maze)
+    nonHorizontalWalls = GetNonHorizontalWalls(startingPos, maze)
+    
+    insideCases = []
+    outsideCases = []
     for i, line in enumerate(lines):
         for j, char in enumerate(line):
             if (i, j) not in mainLoop:
-                if(SearchIntersections(lines, startingPos, maze, mainLoop, (i, j))):
+                adjacent = IsAdjacentTo(insideCases, outsideCases, (i, j))
+                if adjacent == 1: 
+                    insideCases.append((i, j))
                     sum += 1
-                    internalGrounds.append((i, j))
+                elif adjacent == 2:
+                    outsideCases.append((i, j))
+                else:
+                    if(SearchIntersections(lines, nonVerticalWalls, nonHorizontalWalls, mainLoop, (i, j))):
+                        insideCases.append((i, j))
+                        sum += 1
+                    else:
+                        outsideCases.append((i, j))
 
     print(sum)
-    print(internalGrounds)
 
 f = open("Day10/data10.txt", "r")
 lines = f.readlines()
 Part1(lines)
-Part2(lines)
+Part2(lines) #269
