@@ -99,9 +99,7 @@ def SearchIntersections(lines, nonVerticalWalls, nonHorizontalWalls, mainLoop, p
         iMinus = pos[0]
         iMax = height
 
-
-
-    if(jMax - jMinus < iMinus  - iMax):
+    if(jMax - jMinus < iMax  - iMinus):
         for j in range(jMinus, jMax):
             if((pos[0], j) in mainLoop):
                 if(lines[pos[0]][j] not in nonVerticalWalls):
