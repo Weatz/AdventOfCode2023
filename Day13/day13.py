@@ -23,24 +23,31 @@ def FindHorzontalSymetry(table):
     firstLine = table[0]
     lastLine = table[-1]
 
+    for z in table:
+        print(z)
+
     for i, line in enumerate(table):
         if(line == firstLine and i != 0):
-            if(VerifySymetry(table, 0, i)):
-                # i = 15 
-                return int((i + 1) / 2)
+            if((i + 1)% 2 != 1):
+                print(i, 0)
+                if(VerifySymetry(table, 0, i)):
+                    # i = 15 
+                    return int((i + 1) / 2)
         if(line == lastLine and i != len(table) -1):
-            if(VerifySymetry(table, i, len(table) - 1)):
-                # i = 1 len(table) - 1 = 16  ==> 9
-                # 01234567 i = 4, len(table) = 8 ==> 6
-                # 4 + (8 - 4) / 2
-                return i + int((len(table) + i) / 2)
+            if((len(table) - i)%2 != 1):
+                print(i, len(table) - 1)
+                if(VerifySymetry(table, i, len(table) - 1)):
+                    # i = 1 len(table) - 1 = 16  ==> 9
+                    # 01234567 i = 4, len(table) = 8 ==> 6
+                    # 4 + (8 - 4) / 2
+                    return i + int((len(table) - i) / 2)
     return 0
 
 def RotateTable(tab):
     newTab = []
-    for j in range(len(tab[0]) -1, -1, -1):
+    for j in range(len(tab[0])):
         newLine = ""
-        for i in range(len(tab)):
+        for i in range(len(tab) -1, -1, -1):
             newLine = newLine + tab[i][j]
         newTab.append(newLine)
 
@@ -64,7 +71,7 @@ def FindAllSymetry(table):
     rotatedTable = RotateTable(table)
     vertical = FindHorzontalSymetry(rotatedTable)
     print("vertical", vertical)
-    return  horizontal + 100 * vertical
+    return  100 * horizontal + vertical
     
 
 def Part1(lines):
